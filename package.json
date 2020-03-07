@@ -6,6 +6,9 @@
   "scripts": {
     "test": "node fail.js | node index.js"
   },
+  "bin": {
+    "tap-github-actions": "index.js"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
