@@ -5,19 +5,25 @@ const YAML = require("yaml");
 const {issueCommand, issue} = require("@actions/core/lib/command");
 
 let fail = false;
+const regex = /\(([^:]+):(\d+):(\d+)\)$/;
 process.stdin.pipe(
-  new Parser(results => {
-    fail = results.fail;
-    issue("group", "Tap Annotations");
-    for (const failure of results.failures) {
-      const message = YAML.stringify(failure.diag);
-      const [, file, line, col] = failure.diag.at.match(
-        /\(([^:]+):(\d+):(\d+)\)$/
-      );
+  new Parser()
+    .once("assert", () => {
+      issue("group", "Tap Annotations");
+    })
+    .on("assert", ({ok, diag}) => {
+      if (ok) return;
+      const message = YAML.stringify(diag);
+      const stack = diag.stack.split("\n");
+      let match = diag.at.match(regex);
+      while (!match || (match[1].includes("node_modules") && stack.length))
+        match = stack.shift().match(regex);
+      const [, file, line, col] = match;
       issueCommand("error", {file, line, col}, message);
-    }
-    issue("endgroup");
-  })
+    })
+    .on("complete", () => {
+      issue("endgroup");
+    })
 );
 
 process.on("exit", status => {
