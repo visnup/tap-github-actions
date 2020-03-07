@@ -5,7 +5,7 @@ const YAML = require("yaml");
 const {issueCommand, issue} = require("@actions/core/lib/command");
 
 let fail = false;
-const regex = /\(([^:]+):(\d+):(\d+)\)$/;
+const regex = /\(?([^:]+):(\d+):(\d+)\)?$/;
 process.stdin.pipe(
   new Parser()
     .once("assert", () => {
