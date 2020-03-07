@@ -13,6 +13,7 @@ process.stdin.pipe(
     })
     .on("assert", ({ok, diag}) => {
       if (ok) return;
+      fail = true;
       const message = YAML.stringify(diag);
       const stack = diag.stack.split("\n");
       let match = diag.at.match(regex);
