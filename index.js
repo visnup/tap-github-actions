@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const Parser = require("tap-parser");
 const YAML = require("yaml");
 const {issueCommand, issue} = require("@actions/core/lib/command");
