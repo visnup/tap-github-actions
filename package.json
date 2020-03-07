@@ -4,7 +4,7 @@
   "description": "Tap reporter for GitHub Actions annotations",
   "main": "index.js",
   "scripts": {
-    "test": "node fail.js | node index.js"
+    "test": "node test/not-ok.js | node index.js"
   },
   "bin": {
     "tap-github-actions": "./index.js"

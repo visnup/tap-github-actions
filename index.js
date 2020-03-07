@@ -1,32 +1,37 @@
 #!/usr/bin/env node
-
 const Parser = require("tap-parser");
 const YAML = require("yaml");
-const {issueCommand, issue} = require("@actions/core/lib/command");
+const {issueCommand} = require("@actions/core/lib/command");
 
-let fail = false;
-const regex = /\(?([^:]+):(\d+):(\d+)\)?$/;
+const output = process.stdout;
+
+const cwd = new RegExp(process.cwd() + "/", "g");
+const regex = /\(?([^\s:]+):(\d+):(\d+)\)?$/;
+let suite;
 process.stdin.pipe(
   new Parser()
-    .once("assert", () => {
-      issue("group", "Tap Annotations");
+    .on("comment", comment => {
+      output.write(comment);
+      suite = comment.trim();
     })
-    .on("assert", ({ok, diag}) => {
+    .on("assert", ({ok, name, diag}) => {
       if (ok) return;
-      fail = true;
-      const message = YAML.stringify(diag);
+      diag.at = diag.at.replace(cwd, "");
+      diag.stack = diag.stack.replace(cwd, "");
+      const message = `${suite} - ${name}\n\n${YAML.stringify(diag)}`;
       const stack = diag.stack.split("\n");
       let match = diag.at.match(regex);
-      while (!match || (match[1].includes("node_modules") && stack.length))
+      while (
+        !match ||
+        (match[1].match(/^(internal|node_modules)\//) && stack.length)
+      )
         match = stack.shift().match(regex);
       const [, file, line, col] = match;
       issueCommand("error", {file, line, col}, message);
     })
-    .on("complete", () => {
-      issue("endgroup");
+    .on("complete", ({ok}) => {
+      process.on("exit", status => {
+        if (status === 1 || !ok) process.exit(1);
+      });
     })
 );
-
-process.on("exit", status => {
-  if (status === 1 || fail) process.exit(1);
-});
