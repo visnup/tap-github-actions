@@ -1,13 +1,13 @@
 {
   "name": "tap-github-actions",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Tap reporter for GitHub Actions annotations",
   "main": "index.js",
   "scripts": {
     "test": "node fail.js | node index.js"
   },
   "bin": {
-    "tap-github-actions": "index.js"
+    "tap-github-actions": "./index.js"
   },
   "author": "Visnu Pitiyanuvath <visnup@gmail.com>",
   "license": "ISC",
