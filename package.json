@@ -1,6 +1,6 @@
 {
   "name": "tap-github-actions",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Tap reporter for GitHub Actions annotations",
   "main": "index.js",
   "scripts": {
@@ -14,10 +14,11 @@
   "dependencies": {
     "@actions/core": "^1.2.3",
     "tap-parser": "^10.0.1",
-    "tape": "^4.13.2",
     "yaml": "^1.7.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "tape": "^4.13.2"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/visnup/tap-github-actions.git"
