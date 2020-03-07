@@ -1,0 +1,17 @@
+{
+  "name": "tap-github-actions",
+  "version": "0.1.0",
+  "description": "Tap reporter for GitHub Actions annotations",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@actions/core": "^1.2.3",
+    "tap-parser": "^10.0.1",
+    "tape": "^4.13.2",
+    "yaml": "^1.7.2"
+  }
+}
