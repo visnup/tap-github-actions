@@ -10,12 +10,13 @@ const regex = /\(?([^\s:]+):(\d+):(\d+)\)?$/;
 let suite;
 process.stdin.pipe(
   new Parser()
-    .on("comment", comment => {
+    .on("comment", (comment) => {
       output.write(comment);
       suite = comment.trim();
     })
     .on("assert", ({ok, name, diag}) => {
       if (ok) return;
+      if (!diag || !diag.at) return output.write(JSON.stringify(diag) + "\n");
       diag.at = diag.at.replace(cwd, "");
       diag.stack = diag.stack.replace(cwd, "");
       const message = `${suite} - ${name}\n\n${YAML.stringify(diag)}`;
@@ -30,7 +31,7 @@ process.stdin.pipe(
       issueCommand("error", {file, line, col}, message);
     })
     .on("complete", ({ok}) => {
-      process.on("exit", status => {
+      process.on("exit", (status) => {
         if (status === 1 || !ok) process.exit(1);
       });
     })
