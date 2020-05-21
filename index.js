@@ -16,7 +16,8 @@ process.stdin.pipe(
     })
     .on("assert", ({ok, name, diag}) => {
       if (ok) return;
-      if (!diag || !diag.at) return output.write(JSON.stringify(diag) + "\n");
+      if (!diag || !diag.at || !diag.stack)
+        return output.write(JSON.stringify(diag) + "\n");
       diag.at = diag.at.replace(cwd, "");
       diag.stack = diag.stack.replace(cwd, "");
       const message = `${suite} - ${name}\n\n${YAML.stringify(diag)}`;
