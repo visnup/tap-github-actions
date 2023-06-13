@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-const { Parser } = require("tap-parser");
-const YAML = require("yaml");
-const { issueCommand } = require("@actions/core/lib/command");
+import { Parser } from "tap-parser";
+import YAML from "yaml";
+import { issueCommand } from "@actions/core/lib/command.js";
 
 const output = process.stdout;
 
