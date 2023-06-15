@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-const Parser = require("tap-parser");
+const { Parser } = require("tap-parser");
 const YAML = require("yaml");
-const {issueCommand} = require("@actions/core/lib/command");
+const { issueCommand } = require("@actions/core/lib/command");
 
 const output = process.stdout;
 
@@ -14,7 +14,7 @@ process.stdin.pipe(
       output.write(comment);
       suite = comment.trim();
     })
-    .on("assert", ({ok, name, diag}) => {
+    .on("assert", ({ ok, name, diag }) => {
       if (ok) return;
       if (!diag || !diag.at || !diag.stack)
         return output.write(JSON.stringify(diag) + "\n");
@@ -29,9 +29,9 @@ process.stdin.pipe(
       )
         match = stack.shift().match(regex);
       const [, file, line, col] = match;
-      issueCommand("error", {file, line, col}, message);
+      issueCommand("error", { file, line, col }, message);
     })
-    .on("complete", ({ok}) => {
+    .on("complete", ({ ok }) => {
       process.on("exit", (status) => {
         if (status === 1 || !ok) process.exit(1);
       });
